@@ -9,23 +9,33 @@ ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 echo $SDK_PATH
 echo $ARM_TOOLS
 
+
 # Determine file paths
 REPOROOT=$(git rev-parse --show-toplevel)
 SRCROOT=$REPOROOT
 BUILDROOT=$SRCROOT/.build
 echo $BUILDROOT
 
+# python3 -m venv .venv
+# source .venv/bin/activate
+# python3 -m pip install --upgrade pip
+# python3 -m pip install -r $REPOROOT/Tools/requirements.txt
 
 export TOOLCHAINS=$(plutil -extract CFBundleIdentifier raw -o - $TOOLCHAINLOC/Info.plist)
 export PICO_BOARD=$BOARD
 export PICO_SDK_PATH=$SDK_PATH
 export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
 
+
+
+
 #env
 # mkdir -p $BUILDROOT
 # cd $BUILDROOT
 # cmake .. -DPICO_BOARD=pico_w
 # make
+# cd ../
+
 cmake -B build -G Ninja .
 cmake --build build
 #

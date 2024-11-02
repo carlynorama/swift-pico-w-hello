@@ -1,6 +1,6 @@
 Getting to Hello World with Swift on the Pico W on the SuperCon badge...
 
-Fingers crossed...
+Works! Using the CMakeLists.txt from https://github.com/apple/swift-embedded-examples/pull/63
 
 ## Useful Links
 

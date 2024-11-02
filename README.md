@@ -2,6 +2,13 @@ Getting to Hello World with Swift on the Pico W on the SuperCon badge...
 
 Works! Most of the code as is from [the example](https://github.com/apple/swift-embedded-examples/tree/60a648b28066a56d7b1b303923895105e3b753da/pico-w-blink-sdk), but using the CMakeLists.txt from https://github.com/apple/swift-embedded-examples/pull/63 which at time of writing was not on main. 
 
+## To Use
+
+- get the nightly and change the name in build.sh to the nightly being used.
+- set the permissions on the build.sh script and run as current shell `. ./build.sh`
+- attach the badge to the computer holding down the BOOTSEL
+- move the .uf2 file over to the chip
+
 ## Useful Links
 
 - https://github.com/apple/swift-embedded-examples/tree/main

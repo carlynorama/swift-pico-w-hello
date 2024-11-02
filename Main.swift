@@ -1,6 +1,10 @@
 
 @main
-struct Main {
+struct Main {   
+
+    //  static func main() {
+    //     //do nothing
+    //  }
     static func main() {
         let led = UInt32(CYW43_WL_GPIO_LED_PIN)
         if cyw43_arch_init() != 0 {

@@ -2,12 +2,13 @@
 # below vairable with env. 
 #export TESTSHELL="hello"
 
+## Note, toolchain was installed for all users.
+## /Users/$USER/Library/Developer/Toolchains/ for local only
 TOOLCHAINLOC='/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a.xctoolchain'
 BOARD='pico_w'
 SDK_PATH=/Users/$USER/Developer/pico-dev/pico-sdk
 ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 DESTINATION=/Volumes/RPI-RP2
-#TODO, link this to CMake? 
 EXPECTED_EXECUTABLE=swift-blinky.uf2
 echo $SDK_PATH
 echo $ARM_TOOLS

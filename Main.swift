@@ -1,10 +1,16 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift open source project
+//
+// Copyright (c) 2024 Apple Inc. and the Swift project authors.
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+//
+//===----------------------------------------------------------------------===//
 
 @main
-struct Main {   
-
-    //  static func main() {
-    //     //do nothing
-    //  }
+struct Main {
     static func main() {
         let led = UInt32(CYW43_WL_GPIO_LED_PIN)
         if cyw43_arch_init() != 0 {
@@ -37,23 +43,4 @@ struct Main {
             dot()
         }
     }
-    // static let LED_PIN:CUnsignedInt = 25;
-
-    // static func main() {
-    //     //bi_decl(bi_program_description("This is a test binary."));
-    //     //bi_decl(bi_1pin_with_name(LED_PIN, "On-board LED"));
-
-    //     stdio_init_all();
-
-    //     gpio_init(LED_PIN);
-    //     gpio_set_dir(LED_PIN, true);
-
-    //     while true {
-    //         gpio_put(LED_PIN, false);
-    //         sleep_ms(500);
-    //         gpio_put(LED_PIN, true);
-    //         puts("Hello World Again\n");
-    //         sleep_ms(1000);
-    //     }
-    // }
 }

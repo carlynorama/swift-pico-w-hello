@@ -86,5 +86,7 @@ add_custom_target(swift-blinky-swiftcode DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_sw
 target_link_libraries(swift-blinky
     ${CMAKE_CURRENT_BINARY_DIR}/_swiftcode.o
 )
+
+
 add_dependencies(swift-blinky swift-blinky-swiftcode)
 pico_add_extra_outputs(swift-blinky)

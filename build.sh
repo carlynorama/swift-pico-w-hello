@@ -16,11 +16,6 @@ SRCROOT=$REPOROOT
 BUILDROOT=$SRCROOT/.build
 echo $BUILDROOT
 
-# python3 -m venv .venv
-# source .venv/bin/activate
-# python3 -m pip install --upgrade pip
-# python3 -m pip install -r $REPOROOT/Tools/requirements.txt
-
 export TOOLCHAINS=$(plutil -extract CFBundleIdentifier raw -o - $TOOLCHAINLOC/Info.plist)
 export PICO_BOARD=$BOARD
 export PICO_SDK_PATH=$SDK_PATH

@@ -9,15 +9,24 @@ ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 echo $SDK_PATH
 echo $ARM_TOOLS
 
+# Determine file paths
+REPOROOT=$(git rev-parse --show-toplevel)
+SRCROOT=$REPOROOT
+BUILDROOT=$SRCROOT/.build
+echo $BUILDROOT
+
 
 export TOOLCHAINS=$(plutil -extract CFBundleIdentifier raw -o - $TOOLCHAINLOC/Info.plist)
 export PICO_BOARD=$BOARD
 export PICO_SDK_PATH=$SDK_PATH
 export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
+
 #env
-mkdir -p build
-cd build
-cmake .. -DPICO_BOARD=pico_w
-make
-#cmake -B build -G Ninja .
-#cmake --build build
+# mkdir -p $BUILDROOT
+# cd $BUILDROOT
+# cmake .. -DPICO_BOARD=pico_w
+# make
+cmake -B build -G Ninja .
+cmake --build build
+#
+#cp build/swift-blinky.uf2 /Volumes/RP2040

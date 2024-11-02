@@ -26,9 +26,6 @@ export PICO_BOARD=$BOARD
 export PICO_SDK_PATH=$SDK_PATH
 export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
 
-
-
-
 #env
 # mkdir -p $BUILDROOT
 # cd $BUILDROOT

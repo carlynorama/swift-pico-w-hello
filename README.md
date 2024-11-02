@@ -12,3 +12,4 @@ Fingers crossed...
 - https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 - https://github.com/apple/swift-embedded-examples/issues/59#issuecomment-2343265666
 - https://github.com/apple/swift-embedded-examples/issues/62
+- https://github.com/apple/swift-embedded-examples/pull/63

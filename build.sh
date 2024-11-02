@@ -6,6 +6,9 @@ TOOLCHAINLOC='/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-10-3
 BOARD='pico_w'
 SDK_PATH=/Users/$USER/Developer/pico-dev/pico-sdk
 ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
+DESTINATION=/Volumes/RPI-RP2
+#TODO, link this to CMake? 
+EXPECTED_EXECUTABLE=swift-blinky.uf2
 echo $SDK_PATH
 echo $ARM_TOOLS
 
@@ -22,13 +25,16 @@ export PICO_SDK_PATH=$SDK_PATH
 export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
 
 #env
+
+## Ninjaless
 # mkdir -p $BUILDROOT
 # cd $BUILDROOT
 # cmake .. -DPICO_BOARD=pico_w
 # make
 # cd ../
 
-cmake -B build -G Ninja .
-cmake --build build
-#
-#cp build/swift-blinky.uf2 /Volumes/RP2040
+cmake -B $BUILDROOT -G Ninja .
+cmake --build $BUILDROOT
+
+
+cp $BUILDROOT/$EXPECTED_EXECUTABLE $DESTINATION

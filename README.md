@@ -4,10 +4,12 @@ Works! Most of the code as is from [the example](https://github.com/apple/swift-
 
 ## To Use
 
-- get the nightly and change the name in build.sh to the nightly being used.
-- set the permissions on the build.sh script and run as current shell `. ./build.sh`
-- attach the badge to the computer holding down the BOOTSEL
-- move the .uf2 file over to the chip
+- get the [swift nightly toolchain](https://apple.github.io/swift-matter-examples/tutorials/swiftmatterexamples/setup-macos/) and change the name in build.sh to the nightly being used. 
+- make sure the pico SDK location in build.sh is the same as your pico SDK location.
+- attach the pico-w to the computer holding down the BOOTSEL and confirm the name of the volume is the same as the one in the build.sh
+- set the permissions on the build.sh script (`chmod 755 build.sh`)and run as current shell `. ./build.sh`
+
+
 
 ## Useful Links
 

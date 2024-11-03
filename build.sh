@@ -17,7 +17,7 @@ echo $ARM_TOOLS
 # Determine file paths
 REPOROOT=$(git rev-parse --show-toplevel)
 SRCROOT=$REPOROOT
-BUILDROOT=$SRCROOT/.build
+BUILDROOT=$SRCROOT/build
 echo $BUILDROOT
 
 export TOOLCHAINS=$(plutil -extract CFBundleIdentifier raw -o - $TOOLCHAINLOC/Info.plist)
@@ -27,15 +27,15 @@ export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
 
 #env
 
-## Ninjaless
-# mkdir -p $BUILDROOT
-# cd $BUILDROOT
-# cmake .. -DPICO_BOARD=pico_w
-# make
-# cd ../
+# Ninjaless
+mkdir -p $BUILDROOT
+cd $BUILDROOT
+cmake .. -DPICO_BOARD=pico_w
+make
+cd ../
 
-cmake -B $BUILDROOT -G Ninja .
-cmake --build $BUILDROOT
+# cmake -B $BUILDROOT -G Ninja .
+# cmake --build $BUILDROOT
 
 
-cp $BUILDROOT/$EXPECTED_EXECUTABLE $DESTINATION
+#cp $BUILDROOT/$EXPECTED_EXECUTABLE $DESTINATION

@@ -24,7 +24,23 @@ struct Main {
         }
 
         while true {
-            led.set(isHigh:bA.isActive)
+            //led.set(isOn:bA.isActive)
+
+            //TODO: as a mask? 
+            if bB.isActive && bC.isActive {
+                //Note, person will press one or the other first
+                //wait a beat for it to settle. 
+                led.set(isOn:true)
+            } else {
+                if bB.isActive {
+                    led.dot()
+                }
+                if bC.isActive {
+                    led.dash()
+                }
+                led.set(isOn:false)
+            }
+
         }
     }
 }

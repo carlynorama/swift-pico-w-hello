@@ -30,3 +30,5 @@ Works! Most of the code as is from [the example](https://github.com/apple/swift-
 - https://github.com/raspberrypi/pico-examples/blob/master/CMakeLists.txt
 - https://forums.swift.org/t/embedded-swift-running-on-the-raspberry-pi-pico/69001/26?page=2
 - https://github.com/navanchauhan/SwiftLVGL
+- https://www.raspberrypi.com/documentation/pico-sdk/hardware.html#hardware_gpio
+- https://github.com/raspberrypi/pico-sdk/blob/master/src/rp2_common/pico_cyw43_arch/include/pico/cyw43_arch.h

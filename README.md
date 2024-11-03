@@ -32,3 +32,22 @@ Works! Most of the code as is from [the example](https://github.com/apple/swift-
 - https://github.com/navanchauhan/SwiftLVGL
 - https://www.raspberrypi.com/documentation/pico-sdk/hardware.html#hardware_gpio
 - https://github.com/raspberrypi/pico-sdk/blob/master/src/rp2_common/pico_cyw43_arch/include/pico/cyw43_arch.h
+
+
+## Fixing Posix Memalign
+
+
+Whats the deal: 
+- https://stackoverflow.com/questions/6563120/what-does-posix-memalign-memalign-do
+- https://pubs.opengroup.org/onlinepubs/9799919799.2024edition/functions/posix_memalign.html
+
+- Can't add -Xcc -std=c99 b/c SDK doesn't follow that?? Maybe also TODO: check if C11 (https://stackoverflow.com/a/53630273) 
+- Not tried: flatalloc https://stackoverflow.com/a/68010104
+- https://electronics.stackexchange.com/questions/467382/e2-studio-undefined-reference-to-posix-memalign/467753
+- https://forums.swift.org/t/embedded-swift-running-on-the-raspberry-pi-pico/69001/28
+    - https://gist.github.com/navanchauhan/0641c902e4a754cba6cc6b553616072f
+
+In the end:
+https://github.com/apple/swift-playdate-examples/blob/749dd8f518429168d03e754764afb334a80b527d/Sources/Playdate/Playdate.swift#L21
+
+

@@ -10,6 +10,8 @@ else()
 execute_process(COMMAND which swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
+set(HAVE_POSIX_MEMALIGN OFF)
+
 add_executable(swift-blinky)
 target_link_libraries(swift-blinky
     pico_stdlib hardware_uart hardware_gpio pico_lwip_arch pico_cyw43_arch_none
@@ -90,3 +92,6 @@ target_link_libraries(swift-blinky
 
 add_dependencies(swift-blinky swift-blinky-swiftcode)
 pico_add_extra_outputs(swift-blinky)
+# Enable USB output and disable UART output for the executable
+pico_enable_stdio_usb(swift-blinky 1)
+pico_enable_stdio_uart(swift-blinky 0)

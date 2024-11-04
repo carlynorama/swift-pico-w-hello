@@ -10,8 +10,6 @@ else()
 execute_process(COMMAND which swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
-set(HAVE_POSIX_MEMALIGN OFF)
-
 add_executable(swift-blinky)
 target_link_libraries(swift-blinky
     pico_stdlib hardware_uart hardware_gpio pico_lwip_arch pico_cyw43_arch_none

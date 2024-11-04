@@ -33,11 +33,17 @@ struct Main {
             //     led.set(isOn:false)
             // }
 
-            led.dot()
-            led.dash()
-            led.dot()
-            USBSerial.send("Hello World\n");
+            // led.dot()
+            // led.dash()
+            // led.dot()
+            // USBSerial.send("Hello World\n");
             
+            let sum = addNumbers(4,5)
+
+            for _ in (0...sum) {
+                led.dot()
+            }
+            sleep_ms(1000)
 
         }
     }

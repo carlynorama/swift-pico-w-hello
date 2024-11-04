@@ -6,5 +6,7 @@
 #include "hardware/gpio.h"
 #include "pico/cyw43_arch.h"
 
+#include "CPicoHelpers/helper.h"
+
 #endif
 

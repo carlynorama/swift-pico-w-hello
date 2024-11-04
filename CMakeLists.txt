@@ -28,13 +28,23 @@ execute_process(COMMAND which swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILIN
 endif()
 
 add_executable(${MAIN_TARGET_NAME})
+
+
+add_library(CPicoHelpers
+    ${CMAKE_CURRENT_LIST_DIR}/CPicoHelpers/helper.c
+)
+target_include_directories(${MAIN_TARGET_NAME} PRIVATE CPicoHelpers)
+
 target_link_libraries(${MAIN_TARGET_NAME}
     pico_stdlib 
     hardware_uart 
     hardware_gpio 
     pico_lwip_arch 
     pico_cyw43_arch_none
+    CPicoHelpers
 )
+
+
 
 # Gather compile definitions from all dependencies
 # Output is giant blob of -DLIB_PICO settings for -Xcc 

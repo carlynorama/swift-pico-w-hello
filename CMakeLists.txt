@@ -1,7 +1,10 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.28)
+set(PROJECT_NAME new-project-name)
+set(MAIN_TARGET_NAME ${PROJECT_NAME})
+
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-project(swift-blinky)
+project(${PROJECT_NAME})
 pico_sdk_init()
 
 if(APPLE)
@@ -10,8 +13,8 @@ else()
 execute_process(COMMAND which swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
-add_executable(swift-blinky)
-target_link_libraries(swift-blinky
+add_executable(${MAIN_TARGET_NAME})
+target_link_libraries(${MAIN_TARGET_NAME}
     pico_stdlib hardware_uart hardware_gpio pico_lwip_arch pico_cyw43_arch_none
 )
 
@@ -52,13 +55,13 @@ function(gather_compile_definitions_recursive target)
     endif()
 endfunction()
 
-gather_compile_definitions_recursive(swift-blinky)
+gather_compile_definitions_recursive(${MAIN_TARGET_NAME})
 get_property(COMPILE_DEFINITIONS GLOBAL PROPERTY compilerdefs_list)
 
 # Parse compiler definitions into a format that swiftc can understand
 list(REMOVE_DUPLICATES COMPILE_DEFINITIONS)
 list(PREPEND COMPILE_DEFINITIONS "") # adds a semicolon at the beginning
-string(REPLACE "$<TARGET_PROPERTY:PICO_TARGET_BINARY_TYPE>" "$<TARGET_PROPERTY:swift-blinky,PICO_TARGET_BINARY_TYPE>" COMPILE_DEFINITIONS "${COMPILE_DEFINITIONS}")
+string(REPLACE "$<TARGET_PROPERTY:PICO_TARGET_BINARY_TYPE>" "$<TARGET_PROPERTY:${MAIN_TARGET_NAME},PICO_TARGET_BINARY_TYPE>" COMPILE_DEFINITIONS "${COMPILE_DEFINITIONS}")
 string(REPLACE ";" ";-Xcc;-D" COMPILE_DEFINITIONS "${COMPILE_DEFINITIONS}")
 
 add_custom_command(
@@ -72,7 +75,7 @@ add_custom_command(
         -Xcc -I$ENV{PICO_SDK_PATH}/lib/lwip/src/include
         -Xcc -I${CMAKE_CURRENT_LIST_DIR}/include
         -Xfrontend -function-sections -enable-experimental-feature Embedded -wmo -parse-as-library
-        $$\( echo '$<TARGET_PROPERTY:swift-blinky,INCLUDE_DIRECTORIES>' | tr '\;' '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
+        $$\( echo '$<TARGET_PROPERTY:${MAIN_TARGET_NAME},INCLUDE_DIRECTORIES>' | tr '\;' '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
         $$\( echo '${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}'             | tr ' '  '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
         -import-bridging-header ${CMAKE_CURRENT_LIST_DIR}/BridgingHeader.h
         ${CMAKE_CURRENT_LIST_DIR}/Main.swift
@@ -81,15 +84,15 @@ add_custom_command(
         ${CMAKE_CURRENT_LIST_DIR}/BridgingHeader.h
         ${CMAKE_CURRENT_LIST_DIR}/Main.swift
 )
-add_custom_target(swift-blinky-swiftcode DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_swiftcode.o)
+add_custom_target(${MAIN_TARGET_NAME}-swiftcode DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_swiftcode.o)
 
-target_link_libraries(swift-blinky
+target_link_libraries(${MAIN_TARGET_NAME}
     ${CMAKE_CURRENT_BINARY_DIR}/_swiftcode.o
 )
 
 
-add_dependencies(swift-blinky swift-blinky-swiftcode)
-pico_add_extra_outputs(swift-blinky)
+add_dependencies(${MAIN_TARGET_NAME} ${MAIN_TARGET_NAME}-swiftcode)
+pico_add_extra_outputs(${MAIN_TARGET_NAME})
 # Enable USB output and disable UART output for the executable
-pico_enable_stdio_usb(swift-blinky 1)
-pico_enable_stdio_uart(swift-blinky 0)
+pico_enable_stdio_usb(${MAIN_TARGET_NAME} 1)
+pico_enable_stdio_uart(${MAIN_TARGET_NAME} 0)

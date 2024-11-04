@@ -15,7 +15,11 @@ endif()
 
 add_executable(${MAIN_TARGET_NAME})
 target_link_libraries(${MAIN_TARGET_NAME}
-    pico_stdlib hardware_uart hardware_gpio pico_lwip_arch pico_cyw43_arch_none
+    pico_stdlib 
+    hardware_uart 
+    hardware_gpio 
+    pico_lwip_arch 
+    pico_cyw43_arch_none
 )
 
 # Gather compile definitions from all dependencies

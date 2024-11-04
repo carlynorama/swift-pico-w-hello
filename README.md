@@ -32,7 +32,7 @@ Works! Most of the code as is from [the example](https://github.com/apple/swift-
 - https://github.com/navanchauhan/SwiftLVGL
 - https://www.raspberrypi.com/documentation/pico-sdk/hardware.html#hardware_gpio
 - https://github.com/raspberrypi/pico-sdk/blob/master/src/rp2_common/pico_cyw43_arch/include/pico/cyw43_arch.h
-
+- https://github.com/ole/pico-embedded-swift
 
 ## Fixing Posix Memalign
 

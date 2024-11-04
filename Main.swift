@@ -43,7 +43,10 @@ struct Main {
             for _ in (0...sum) {
                 led.dot()
             }
+            let val = PICO_DEFAULT_I2C_SDA_PIN //defaultI2CDefined()//
+            USBSerial.send("\(val)")
             sleep_ms(1000)
+
 
         }
     }

@@ -3,4 +3,6 @@
 
 int addNumbers(int a, int b);
 
+int defaultI2CDefined(void);
+
 #endif

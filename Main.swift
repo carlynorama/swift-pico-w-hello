@@ -38,14 +38,36 @@ struct Main {
             // led.dot()
             // USBSerial.send("Hello World\n");
             
-            let sum = addNumbers(4,5)
-
+            let sum = addNumbers(4,1)
             for _ in (0...sum) {
                 led.dot()
             }
-            let val = PICO_DEFAULT_I2C_SDA_PIN //defaultI2CDefined()//
-            USBSerial.send("\(val)")
-            sleep_ms(1000)
+            USBSerial.send("Hello World\n");
+
+            if I2C.setupDefault() == true {
+                USBSerial.send("i2c setup success!")
+            } else {
+                USBSerial.send("i2c setup: something went wrong.")
+            }
+
+            //cool, didn't think to do this in Swift before. 
+            //maxAddress is top of the 7bit address space.
+            var validAddresses:[Int] = []
+            for address in (1...6) {
+                let result = i2c_default_address_check(Int32(address))
+                USBSerial.send("\(result)")
+                if result > -1  {
+                    validAddresses.append(address)
+                }
+            }
+
+            //cool, didn't think to do this in Swift before. 
+            //maxAddress is top of the 7bit address space.
+            // var validAddresses:[Int] = (0..<(1 << 7)).filter { a in
+            //     i2c_default_address_check(Int32(a)) > -1
+            // }
+
+            USBSerial.send("There are \(validAddresses.count) devices.")
 
 
         }
@@ -92,6 +114,33 @@ struct WiFi {
             return false
         }
         return true
+    }
+}
+
+struct I2C {
+// https://github.com/raspberrypi/pico-examples/blob/master/i2c/bus_scan/bus_scan.c
+
+// I2C reserves some addresses for special purposes. We exclude these from the scan.
+// These are any addresses of the form 000 0xxx or 111 1xxx
+    static func reservedAddress(_ addr:UInt8) -> Bool {
+        return (addr & 0x78) == 0 || (addr & 0x78) == 0x78;
+    }
+
+    static func setupDefault() -> Bool {
+        let result = i2c_setup_default()
+        if result == 0 {
+            return true
+        }
+        return false
+    }
+
+    //todo, instance enum? 
+    static func setupI2C0(SDA:UInt32, SCL:UInt32) -> Bool {
+       let result = i2c_setup_i2c0(SDA, SCL)
+        if result == 0 {
+            return true
+        }
+        return false
     }
 }
 

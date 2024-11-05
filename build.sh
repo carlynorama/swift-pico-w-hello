@@ -9,7 +9,7 @@ BOARD='pico_w'
 SDK_PATH=/Users/$USER/Developer/pico-dev/pico-sdk
 ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 DESTINATION=/Volumes/RPI-RP2
-EXPECTED_EXECUTABLE=swift-blinky.uf2
+EXPECTED_EXECUTABLE=new-project-name.uf2
 echo $SDK_PATH
 echo $ARM_TOOLS
 
@@ -17,7 +17,7 @@ echo $ARM_TOOLS
 # Determine file paths
 REPOROOT=$(git rev-parse --show-toplevel)
 SRCROOT=$REPOROOT
-BUILDROOT=$SRCROOT/build
+BUILDROOT=$REPOROOT/build
 echo $BUILDROOT
 
 export TOOLCHAINS=$(plutil -extract CFBundleIdentifier raw -o - $TOOLCHAINLOC/Info.plist)

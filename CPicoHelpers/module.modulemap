@@ -1,4 +1,0 @@
-module CPicoHelpers {
-  header "helper.h"
-  export *
-}

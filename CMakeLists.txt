@@ -27,12 +27,9 @@ else()
 execute_process(COMMAND which swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
-add_executable(${MAIN_TARGET_NAME})
-
-add_library(CPicoHelpers
-    ${CMAKE_CURRENT_LIST_DIR}/CPicoHelpers/helper.c
+add_executable(${MAIN_TARGET_NAME}
+    helper.c
 )
-target_include_directories(${MAIN_TARGET_NAME} PRIVATE CPicoHelpers)
 
 target_link_libraries(${MAIN_TARGET_NAME}
     pico_stdlib 
@@ -41,7 +38,6 @@ target_link_libraries(${MAIN_TARGET_NAME}
     pico_lwip_arch 
     pico_cyw43_arch_none
     hardware_i2c
-    CPicoHelpers
 )
 
 # Gather compile definitions from all dependencies
@@ -82,6 +78,8 @@ function(gather_compile_definitions_recursive target)
         endforeach()
     endif()
 endfunction()
+
+message(" ----- SOURCES: ${SOURCES} ---- ")
 
 # HMMMM... will this still be appropriate when not all are pico's? 
 gather_compile_definitions_recursive(${MAIN_TARGET_NAME})
@@ -128,6 +126,7 @@ add_custom_command(
         # tell CC to look in include folder
         # (need to add an empty header for lwip. TODO - why?)
         -Xcc -I${CMAKE_CURRENT_LIST_DIR}/include
+        -Xcc -I${CMAKE_CURRENT_LIST_DIR}/helper.h
         $$\( echo '$<TARGET_PROPERTY:${MAIN_TARGET_NAME},INCLUDE_DIRECTORIES>' | tr '\;' '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
         $$\( echo '${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}'             | tr ' '  '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
         # Add the briding header 
@@ -135,6 +134,7 @@ add_custom_command(
         # list the swift files to compile
         ${CMAKE_CURRENT_LIST_DIR}/Main.swift
         # Compile or assemble the source files, but do not link.
+        # note that the .c file is part of the sources.
         -c 
         # Output to the file name below (TODO, is this not redundant to OUTPUT?)
         -o ${CMAKE_CURRENT_BINARY_DIR}/_swiftcode.o
@@ -147,7 +147,6 @@ add_custom_target(${MAIN_TARGET_NAME}-swiftcode DEPENDS ${CMAKE_CURRENT_BINARY_D
 target_link_libraries(${MAIN_TARGET_NAME}
     ${CMAKE_CURRENT_BINARY_DIR}/_swiftcode.o
 )
-
 
 add_dependencies(${MAIN_TARGET_NAME} ${MAIN_TARGET_NAME}-swiftcode)
 pico_add_extra_outputs(${MAIN_TARGET_NAME})

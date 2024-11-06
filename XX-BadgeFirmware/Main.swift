@@ -3,7 +3,7 @@
 struct Main {
     static func main() {
         //let led = LED(pin: 25)
-        let led = OnboardLED(pin: UInt32(CYW43_WL_GPIO_LED_PIN))
+        let led = OnboardLED()
         
         let bA = Button(pin: 8)
         let bB = Button(pin: 9)
@@ -38,10 +38,10 @@ struct Main {
             // led.dot()
             // USBSerial.send("Hello World\n");
             
-        let sum = addNumbers(4,1)
+            let sum = addNumbers(4,1)
             for _ in (0...sum) {
-                //led.dot()
-        }
+                led.dot()
+            }
             USBSerial.send("Hello World 2\n");
 
             if I2C.setupI2C0(dataPin: 0, clockPin: 1) == true {

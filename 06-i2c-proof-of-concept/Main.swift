@@ -3,7 +3,7 @@
 struct Main {
     static func main() {
         //let led = LED(pin: 25)
-        let led = OnboardLED(pin: UInt32(CYW43_WL_GPIO_LED_PIN))
+        let led = OnboardLED()
         
         let bA = Button(pin: 8)
         let bB = Button(pin: 9)
@@ -107,11 +107,7 @@ struct WiFi {
 //Once you've imported cyw43_arch the regular io stops working?
 //because it works in C..
 struct OnboardLED {
-    let pin:UInt32
-
-    init(pin p:UInt32) {
-        self.pin = p
-    }
+    let pin:UInt32 = UInt32(CYW43_WL_GPIO_LED_PIN)
 
     func high() {
         cyw43_arch_gpio_put(pin, true)

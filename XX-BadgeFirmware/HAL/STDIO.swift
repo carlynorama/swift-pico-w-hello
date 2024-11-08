@@ -11,7 +11,7 @@ struct USBSerial {
         puts(c);
     }
 
-    //No generics yet.
+    // No generics yet.
     // static func send<T>(_ array:[T], label:UnsafePointer<CChar>) {
     //     puts("------------------");
     //     puts(label);

@@ -14,6 +14,7 @@ struct Main {
         let touchwheelAddress = 0x54
 
         let bus0 = I2C(.i2c0, dataPin:0, clockPin:1)
+        let bus1 = I2C(.i2c1, dataPin:26, clockPin:27)
 
         //turn on board LED
         //find devices on i2c busses
@@ -22,10 +23,15 @@ struct Main {
 
         while true {
             USBSerial.send("Hello World\n");
-            let whosThere = bus0.scan()
-            USBSerial.send("I can see: \(whosThere.count) devices. \n");
-            USBSerial.send("\(whosThere[0])")
-            USBSerial.send(whosThere, label: "What addresses")
+            let whosThere0 = bus0.scan()
+            USBSerial.send("I can see: \(whosThere0.count) devices on 0 \n");
+            USBSerial.send("\(whosThere0[0])")
+            USBSerial.send(whosThere0, label: "What addresses 0")
+
+            let whosThere1 = bus1.scan()
+            USBSerial.send("I can see: \(whosThere1.count) devices on 1 \n");
+            USBSerial.send("\(whosThere1[0])")
+            USBSerial.send(whosThere1, label: "What addresses 0")
             sleep_ms(500)
 
             //if petal, write various things to it based on button

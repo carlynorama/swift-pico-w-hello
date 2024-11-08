@@ -24,20 +24,32 @@ struct I2C {
     init(_ i:Instance, dataPin SDA:Int32, clockPin SCL:Int32, baudRate BAUD:Int32 = 400 * 1000) {
         //TODO make conditional init. 
         let _ = I2C.setupInstance(i, dataPin:SDA, clockPin:SCL, baudRate:BAUD)
-        I2C.activeBusses.append(i)
+        
 
         self.instance = i
         self.dataPin = SDA
         self.clockPin = SCL
         self.baudRate = BAUD
+
+        I2C.activeBusses.append(self)
     }
 
-    func scan() -> [Int32] {
+    func scan() -> [UInt8] {
         I2C.scan(instance)
     }
 
-    func scan(for address:Int32) -> Bool {
+    func scan(for address:UInt8) -> Bool {
         I2C.scan(instance, for:address)
+    }
+
+    func write(_ v:UInt8, toRegister register:UInt32, at address:UInt8) {
+        //int i2c_write_i2c0(uint8_t addr, const uint8_t *src, size_t len, bool nostop);
+        let a = UInt8(address)
+        var src = v
+        let len:Int32 = 1
+        let nostop = false
+        i2c_write_i2c0(a, &src, len, nostop)
+
     }
 
 
@@ -61,14 +73,14 @@ extension I2C {
 extension I2C {
 
     //This is determined per project. Would it be better to be in the project? 
-    static var activeBusses:[Instance] = []
+    static var activeBusses:[I2C] = []
 
-    static func isReserved(_ addr:Int32) -> Bool {
+    static func isReserved(_ addr:UInt8) -> Bool {
         return (addr & 0x78) == 0 || (addr & 0x78) == 0x78;
     }
 
-    static func scan(_ instance:Instance) -> [Int32] {
-        let checking_func:(Int32) -> Int32 = switch instance {
+    static func scan(_ instance:Instance) -> [UInt8] {
+        let checking_func:(UInt8) -> Int32 = switch instance {
                 case .i2c0 : i2c_i2c0_address_check
                 case .i2c1 : i2c_i2c1_address_check
         }
@@ -89,22 +101,22 @@ extension I2C {
         //TODO switch to this once verify scan works. 
             // //cool, didn't think to do this in Swift before. 
             // //maxAddress is top of the 7bit address space.
-            var validAddresses:[Int32] = (0..<(1 << 7)).filter { a in
-                !I2C.isReserved(Int32(a)) && checking_func(Int32(a)) > -1
+            var validAddresses:[UInt8] = (0..<(1 << 7)).filter { a in
+                !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
             }
             return validAddresses
 
     }
 
-    static func scan(_ instance:Instance, for address:Int32) -> Bool {
-        let checking_func:(Int32) -> Int32 = switch instance {
+    static func scan(_ instance:Instance, for address:UInt8) -> Bool {
+        let checking_func:(UInt8) -> Int32 = switch instance {
                 case .i2c0 : i2c_i2c0_address_check
                 case .i2c1 : i2c_i2c1_address_check
         }
         
         
-        let result = checking_func(Int32(address))
-        return result == 0
+        let result = checking_func(address)
+        return result > -1
     }
 
 

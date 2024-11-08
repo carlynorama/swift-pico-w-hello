@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <stdbool.h>
+#include "helper.h"
 #include "hardware/i2c.h"
 #include "hardware/gpio.h"
 
@@ -88,26 +91,32 @@ int i2c_setup_i2c1(int sda_pin, int scl_pin, int baud_rate) {
 }
 
 //--------- ADDRESS CHECKS
-int i2c_address_check(i2c_inst_t *i2c, int addr) {
+int i2c_address_check(i2c_inst_t *i2c, uint8_t addr) {
         // Perform a 1-byte dummy read from the probe address. The function 
         // returns the number of bytes transferred if address is acknowledged.
         // If the address byte is ignored, the function returns -1.
 
         // Skip over any reserved addresses.
-        int ret;
+        // int ret;
         uint8_t rxdata;
-        if (i2c_reserved_addr(addr))
-            ret = PICO_ERROR_GENERIC;
-        else
-            ret = i2c_read_blocking(i2c, addr, &rxdata, 1, false);
+        // if (i2c_reserved_addr(addr))
+        //     ret = PICO_ERROR_GENERIC;
+        // else
+        //    ret = 
         
-        return ret;
+        return i2c_read_blocking(i2c, addr, &rxdata, 1, false);;
 }
 
-int i2c_i2c0_address_check(int addr) {
+int i2c_i2c0_address_check(uint8_t addr) {
     i2c_address_check(i2c0, addr);
 }
 
-int i2c_i2c1_address_check(int addr) {
+int i2c_i2c1_address_check(uint8_t addr) {
     i2c_address_check(i2c1, addr);
+}
+
+//----------- BASIC WRITE
+
+int i2c_write_i2c0(uint8_t addr, const uint8_t *src, int len, bool nostop) {
+    i2c_write_blocking(i2c0, addr, src, len, nostop);
 }

@@ -1,59 +1,65 @@
 
 @main
 struct Main {
+
     static func main() {
-        //let led = LED(pin: 25)
-        let led = OnboardLED()
-        
-        let bA = Button(pin: 8)
-        let bB = Button(pin: 9)
-        let bC = Button(pin: 28)
 
         guard WiFi.confirm() else {
             return
         }
-
         USBSerial.initHardware()
 
+        //expected I2C devices and their addresses
+        let petalAddress = 0x00
+        let touchwheelAddress = 0x54
+
+        let bus0 = I2C(.i2c0, dataPin:0, clockPin:1)
+
+        //turn on board LED
+        //find devices on i2c busses
+
+        //if petal run test spiral
+
         while true {
-            //led.set(isOn:bA.isActive)
+            USBSerial.send("Hello World\n");
+            let whosThere = bus0.scan()
+            USBSerial.send("I can see: \(whosThere.count) devices. \n");
+            USBSerial.send("\(whosThere[0])")
+            USBSerial.send(whosThere, label: "What addresses")
+            sleep_ms(500)
 
-            // //TODO: as a mask? 
-            // if bB.isActive && bC.isActive {
-            //     //Note, person will press one or the other first
-            //     //wait a beat for it to settle. 
-            //     led.set(isOn:true)
-            // } else {
-            //     if bB.isActive {
-            //         led.dot()
-            //     }
-            //     if bC.isActive {
-            //         led.dash()
-            //     }
-            //     led.set(isOn:false)
-            // }
+            //if petal, write various things to it based on button
+            //display button status on RGB
 
-            // led.dot()
-            // led.dash()
-            // led.dot()
-            // USBSerial.send("Hello World\n");
-            
-            let sum = addNumbers(4,1)
-            for _ in (0...sum) {
-                led.dot()
-            }
-            USBSerial.send("Hello World 2\n");
+            //if touchwheel, read touchwheel
 
-            if I2C.setupI2C0(dataPin: 0, clockPin: 1) == true {
-                USBSerial.send("i2c setup success!")
-            } else {
-                USBSerial.send("i2c setup: something went wrong.")
-            }
-
-            var validAddresses = I2C.scanAddressesI2C0()
-            USBSerial.send("There are \(validAddresses.count) devices.")
-
+            //if touchwheel, && petal
+            //write tw value to petal
 
         }
+    }
+}
+
+
+protocol BadgeSAO {
+    var address:Int32 { get }
+    var i2cBus:I2C.Instance? { get }
+}
+
+struct TouchwheelSAO:BadgeSAO {
+    let address:Int32
+    let i2cBus:I2C.Instance?
+
+}
+
+extension TouchwheelSAO {
+    init?(expectedAddress a:Int32)  {
+        let whichInstance = I2C.activeBusses.filter { i in 
+            I2C.scan(i, for: a)
+        }
+        if whichInstance.count == 0 { return nil }
+        //TODO: handle the more than 1 better.
+        self.i2cBus = whichInstance[0]
+        self.address = a
     }
 }

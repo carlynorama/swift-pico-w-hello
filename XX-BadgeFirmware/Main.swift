@@ -118,7 +118,11 @@ extension TouchwheelSAO {
         case REG_NONE     = 255
     }
 
+    //TODO: Throw?
     func readWheel() -> UInt8 {
+        if let i2cBus {
+
+        }
         return 0
     }
 
@@ -128,9 +132,6 @@ extension TouchwheelSAO {
                                 (g, Register.REG_LED_RGBG.rawValue),
                                 (b, Register.REG_LED_RGBB.rawValue)
                                 ], for:address)
-            // i2cBus.write(r, at:Register.REG_LED_RGBR.rawValue, for:address)
-            // i2cBus.write(g, at:Register.REG_LED_RGBG.rawValue, for:address)
-            // i2cBus.write(b, at:Register.REG_LED_RGBB.rawValue, for:address)
         }
     }
 

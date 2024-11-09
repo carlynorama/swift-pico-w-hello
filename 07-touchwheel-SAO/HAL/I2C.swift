@@ -43,17 +43,35 @@ struct I2C {
     }
 
     //send a single
-    func write(_ value:UInt8, toRegister register:UInt8, at address:UInt8) {
+    func write(_ value:UInt8, at register:UInt8, for address:UInt8) {
+        //uint8_t addr, const uint8_t *src, int len, bool nostop
+        let sending_func:(UInt8, UnsafePointer<UInt8>, Int32, Bool) -> Int32 = switch instance {
+                case .i2c0 : i2c_write_i2c0
+                case .i2c1 : i2c_write_i2c1
+        }
         //int i2c_write_i2c0(uint8_t addr, const uint8_t *src, size_t len, bool nostop);
         let addr = UInt8(address)
         var writeBuffer:[UInt8] = [register,value]
         let len:Int32 = Int32(1 + MemoryLayout.size(ofValue: value))
-        puts("length is \(len)")
         //should this session keep control of the bus when done with this write.
         //(are you going to immediately read or write something else)
         let nostop = false 
-        i2c_write_i2c0(addr, &writeBuffer, len, nostop)
+        let _ = sending_func(addr, &writeBuffer, len, nostop)
+    }
 
+    //TODO: Handle empty array.
+    func writeSequence(_ value:[(UInt8,UInt8)], for address:UInt8) {
+        let sending_func:(UInt8, UnsafePointer<UInt8>, Int32, Bool) -> Int32 = switch instance {
+                case .i2c0 : i2c_write_i2c0
+                case .i2c1 : i2c_write_i2c1
+        }
+        let len = Int32(1 + MemoryLayout.size(ofValue: value[0].0))
+        //int i2c_write_i2c0(uint8_t addr, const uint8_t *src, size_t len, bool nostop);
+        for i in (0..<(value.count)) {
+            let (value, register) = value[i]
+            var writeBuffer:[UInt8] = [register,value]
+            let _ = sending_func(address, &writeBuffer, len, false)
+        }
     }
 
 

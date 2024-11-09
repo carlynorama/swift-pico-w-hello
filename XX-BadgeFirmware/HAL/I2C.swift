@@ -42,13 +42,17 @@ struct I2C {
         I2C.scan(instance, for:address)
     }
 
-    func write(_ v:UInt8, toRegister register:UInt32, at address:UInt8) {
+    //send a single
+    func write(_ value:UInt8, toRegister register:UInt8, at address:UInt8) {
         //int i2c_write_i2c0(uint8_t addr, const uint8_t *src, size_t len, bool nostop);
-        let a = UInt8(address)
-        var src = v
-        let len:Int32 = 1
-        let nostop = false
-        i2c_write_i2c0(a, &src, len, nostop)
+        let addr = UInt8(address)
+        var writeBuffer:[UInt8] = [register,value]
+        let len:Int32 = Int32(1 + MemoryLayout.size(ofValue: value))
+        puts("length is \(len)")
+        //should this session keep control of the bus when done with this write.
+        //(are you going to immediately read or write something else)
+        let nostop = false 
+        i2c_write_i2c0(addr, &writeBuffer, len, nostop)
 
     }
 

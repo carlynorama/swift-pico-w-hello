@@ -23,7 +23,7 @@ struct Main {
         
         
         let touchWheel = TouchwheelSAO(expectedAddress: touchwheelAddress) 
-        if let touchWheel {
+        if touchWheel != nil {
                 USBSerial.send("made a touchWheel")
         }
 
@@ -93,7 +93,7 @@ extension TouchwheelSAO {
 
     //from SAO firmware 
     //https://github.com/todbot/TouchwheelSAO/blob/main/firmware/TouchwheelSAO_attiny816/TouchwheelSAO_attiny816.ino
-    enum Register:UInt32 { 
+    enum Register:UInt8 { 
         case REG_POSITION = 0   // angular position 1-255 of touch, or 0 if no touch
         case REG_TOUCHES  = 1   // bitfield of three booleans, one for each touch pad
         case REG_RAW0L    = 2   // touchpad 0 raw count, low byte

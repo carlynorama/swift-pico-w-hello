@@ -52,10 +52,10 @@ struct Main {
                 // if val == 0 {
                 //     touchWheel.setColor(r: 200, g: 100, b: 0)
                 // }
-                // touchWheel.onStatusLED()
-                // sleep_ms(250)
-                // touchWheel.offStatusLED()
-                // sleep_ms(500)
+                touchWheel.onStatusLED()
+                sleep_ms(250)
+                touchWheel.offStatusLED()
+                sleep_ms(250)
             }
             
 

@@ -124,16 +124,16 @@ extension TouchwheelSAO {
 
     //TODO: Throw? 
     func readWheel() -> UInt8 {
-        return fetch_touchwheel()
-        // if let i2cBus {
-        //     //TODO, confirm return length of array was 1?
-        //     let result = i2cBus.readValue2(from:address, at:Register.REG_POSITION.rawValue, length:1)
-        //     if result.count > 1 {
-        //         USBSerial.send("read result is too long. ")
-        //     }
-        //     return result[0]
-        // } 
-        // return 0
+        //return fetch_touchwheel()
+        if let i2cBus {
+            //TODO, confirm return length of array was 1?
+            let result = i2cBus.readValue(from:address, at:Register.REG_POSITION.rawValue, length:1)
+            if result.count > 1 {
+                USBSerial.send("read result is too long. ")
+            }
+            return result[0]
+        } 
+        return 0
     }
 
     func setColor(r:UInt8, g:UInt8, b:UInt8) {

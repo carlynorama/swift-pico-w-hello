@@ -148,13 +148,14 @@ int i2c_write_read_i2c1(uint8_t addr, const uint8_t *src, int src_len, uint8_t *
 }
 
 
-uint8_t fetch_touchwheel() {
-    uint8_t reg = 0;
-    uint8_t dst = 0;
-    i2c_write_blocking(i2c1, 0x54, &reg, 1, true);
-    i2c_read_blocking(i2c1, 0x54, &dst, 1, false);
-    return dst;
-}
+// for trouble shooting write-read-nostop issue which magically resolved itself. gremlins. 
+// uint8_t fetch_touchwheel() {
+//     uint8_t reg = 0;
+//     uint8_t dst = 0;
+//     i2c_write_blocking(i2c1, 0x54, &reg, 1, true);
+//     i2c_read_blocking(i2c1, 0x54, &dst, 1, false);
+//     return dst;
+//}
 
 // void lis3dh_read_data(uint8_t reg, float *final_value) {
 //     // Read two bytes of data and store in a 16 bit data structure

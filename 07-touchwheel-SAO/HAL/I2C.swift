@@ -122,7 +122,7 @@ extension I2C {
 
         //TODO switch to this once verify scan works. 
             // //cool, didn't think to do this in Swift before. 
-            // //maxAddress is top of the 7bit address space.
+            // //maxAddress is 128, or 10000000
             var validAddresses:[UInt8] = (0..<(1 << 7)).filter { a in
                 !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
             }

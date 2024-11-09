@@ -156,7 +156,7 @@ struct I2C {
 
         static func scanAddressesDefault() -> [Int] {
                     //cool, didn't think to do this in Swift before. 
-            //maxAddress is top of the 7bit address space.
+            //maxAddress is 128, or 10000000
             // var validAddresses:[Int] = []
             // for address in (1...6) {
             //     let result = i2c_default_address_check(Int32(address))
@@ -167,7 +167,7 @@ struct I2C {
             // }
 
             //cool, didn't think to do this in Swift before. 
-            //maxAddress is top of the 7bit address space.
+            //maxAddress is 128, or 10000000
             var validAddresses:[Int] = (0..<(1 << 7)).filter { a in
                 i2c_default_address_check(Int32(a)) > -1
             }

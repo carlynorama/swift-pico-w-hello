@@ -47,11 +47,13 @@ struct Main {
             // USBSerial.send(whosThere1, label: "What addresses 0")
 
             if let touchWheel {
-                touchWheel.setColor(r: 200, g: 100, b: 0)
-                touchWheel.onStatusLED()
-                sleep_ms(250)
-                touchWheel.offStatusLED()
-                sleep_ms(500)
+                //touchWheel.setColor(r: 200, g: 100, b: 0)
+                let val = touchWheel.readWheel()
+                USBSerial.send("\(val)")
+                // touchWheel.onStatusLED()
+                // sleep_ms(250)
+                // touchWheel.offStatusLED()
+                // sleep_ms(500)
             }
             
 
@@ -118,11 +120,16 @@ extension TouchwheelSAO {
         case REG_NONE     = 255
     }
 
-    //TODO: Throw?
+    //TODO: Throw? 
     func readWheel() -> UInt8 {
         if let i2cBus {
-
-        }
+            //TODO, confirm return length of array was 1?
+            let result = i2cBus.read(from:address, at:Register.REG_POSITION.rawValue, length:1)
+            if result.count > 1 {
+                USBSerial.send("read result is too long. ")
+            }
+            return result[0]
+        } 
         return 0
     }
 

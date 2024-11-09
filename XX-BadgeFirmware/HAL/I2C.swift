@@ -77,12 +77,20 @@ struct I2C {
     }
 
     func read(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+        let reading_func:(UInt8, UnsafeMutablePointer<UInt8>?, Int32, Bool) -> Int32 = switch instance {
+            case .i2c0 : i2c_read_i2c0
+            case .i2c1 : i2c_read_i2c1
+        }
+
         //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
-        var result = Array<UInt8>(repeating: 0, count: Int(length))
+        var buffer = Array<UInt8>(repeating: 0, count: Int(length))
         
-        return result.withContiguousMutableStorageIfAvailable { dest in
-            let _ = i2c_read_i2c0(addr, dest.baseAddress, length, false)
+        //function returns status code in theory.
+        let _ = buffer.withContiguousMutableStorageIfAvailable { dest in
+            reading_func(addr, dest.baseAddress, length, false)
         } 
+
+        return buffer
     }
 
 
@@ -117,24 +125,10 @@ extension I2C {
                 case .i2c0 : i2c_i2c0_address_check
                 case .i2c1 : i2c_i2c1_address_check
         }
-
-        // var validAddresses:[Int] = []
-        // for address in (0..<(1 << 7)) {
-        //     if !I2C.isReserved(Int32(address)) {
-        //         let result = checking_func(Int32(address))
-        //         USBSerial.send("\(result)")
-        //         if result > -1  {
-        //             validAddresses.append(address)
-        //         }
-        //     }
- 
-        // }
-        // return validAddresses
-
-            //maxAddress is 128, or 10000000
-            return (0..<(1 << 7)).filter { a in
-                !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
-            }
+        //maxAddress is 128, or 10000000
+        return (0..<(1 << 7)).filter { a in
+            !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
+        }
     }
 
     static func scan(_ instance:Instance, for address:UInt8) -> Bool {

@@ -42,6 +42,8 @@ struct I2C {
         I2C.scan(instance, for:address)
     }
 
+
+
     //send a single
     func write(_ value:UInt8, at register:UInt8, for address:UInt8) {
         //uint8_t addr, const uint8_t *src, int len, bool nostop
@@ -74,6 +76,65 @@ struct I2C {
         }
     }
 
+    //won't need this typically, a read without a pre-write
+    private func read(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+        let reading_func:(UInt8, UnsafeMutablePointer<UInt8>?, Int32, Bool) -> Int32 = switch instance {
+            case .i2c0 : i2c_read_i2c0
+            case .i2c1 : i2c_read_i2c1
+        }
+
+        //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
+        var buffer = Array<UInt8>(repeating: 0, count: Int(length))
+        
+        //function returns status code in theory.
+        let _ = buffer.withContiguousMutableStorageIfAvailable { dest in
+            reading_func(addr, dest.baseAddress, length, false)
+        } 
+
+        return buffer
+    }
+
+    
+    func readValue(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+        let reading_func:(UInt8, UnsafeMutablePointer<UInt8>?, Int32, Bool) -> Int32 = switch instance {
+            case .i2c0 : i2c_read_i2c0
+            case .i2c1 : i2c_read_i2c1
+        }
+
+        let sending_func:(UInt8, UnsafePointer<UInt8>, Int32, Bool) -> Int32 = switch instance {
+                case .i2c0 : i2c_write_i2c0
+                case .i2c1 : i2c_write_i2c1
+        }
+
+        //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
+        var readBuffer = Array<UInt8>(repeating: 0, count: Int(length))
+        var writeBuffer:[UInt8] = [register]
+        let _ = sending_func(addr, &writeBuffer, length, true) //TODO: when set to true fails?
+        //function returns status code in theory.
+        let _ = readBuffer.withContiguousMutableStorageIfAvailable { dest in
+            reading_func(addr, dest.baseAddress, length, false)
+        } 
+
+        return readBuffer
+    }
+
+    // wrote a C function that wrote and read when nostop was being glitchy. Would rather do more in the swift. 
+    // func readValue2(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+    //     let write_reading_func:(UInt8, UnsafePointer<UInt8>, Int32, UnsafeMutablePointer<UInt8>?, Int32) -> Int32 = switch instance {
+    //         case .i2c0 : i2c_write_read_i2c0
+    //         case .i2c1 : i2c_write_read_i2c1
+    //     }
+
+    //     //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
+    //     var readBuffer = Array<UInt8>(repeating: 0, count: Int(length))
+    //     var writeBuffer:[UInt8] = [register]
+
+    //     let _ = readBuffer.withContiguousMutableStorageIfAvailable { dest in
+    //         write_reading_func(addr, &writeBuffer, 1, dest.baseAddress, length)
+    //     } 
+
+    //     return readBuffer
+    // }
 
 
 }
@@ -106,28 +167,10 @@ extension I2C {
                 case .i2c0 : i2c_i2c0_address_check
                 case .i2c1 : i2c_i2c1_address_check
         }
-
-        // var validAddresses:[Int] = []
-        // for address in (0..<(1 << 7)) {
-        //     if !I2C.isReserved(Int32(address)) {
-        //         let result = checking_func(Int32(address))
-        //         USBSerial.send("\(result)")
-        //         if result > -1  {
-        //             validAddresses.append(address)
-        //         }
-        //     }
- 
-        // }
-        // return validAddresses
-
-        //TODO switch to this once verify scan works. 
-            // //cool, didn't think to do this in Swift before. 
-            // //maxAddress is 128, or 10000000
-            var validAddresses:[UInt8] = (0..<(1 << 7)).filter { a in
-                !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
-            }
-            return validAddresses
-
+        //maxAddress is 128, or 10000000
+        return (0..<(1 << 7)).filter { a in
+            !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
+        }
     }
 
     static func scan(_ instance:Instance, for address:UInt8) -> Bool {

@@ -124,3 +124,52 @@ int i2c_write_i2c0(uint8_t addr, const uint8_t *src, int len, bool nostop) {
 int i2c_write_i2c1(uint8_t addr, const uint8_t *src, int len, bool nostop) {
     i2c_write_blocking(i2c1, addr, src, len, nostop);
 }
+
+//----------- BASIC READ
+
+int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop) {
+    i2c_read_blocking(i2c0, addr, dst, len, nostop);
+}
+
+int i2c_read_i2c1(uint8_t addr, uint8_t *dst, int len, bool nostop) {
+    i2c_read_blocking(i2c1, addr, dst, len, nostop);
+}
+
+//---------- Read Value
+
+int i2c_write_read_i2c0(uint8_t addr, const uint8_t *src, int src_len, uint8_t *dst, int dst_len) {
+    i2c_write_blocking(i2c0, addr, src, src_len, true);
+    i2c_read_blocking(i2c0, addr, dst, dst_len, false);
+}
+
+int i2c_write_read_i2c1(uint8_t addr, const uint8_t *src, int src_len, uint8_t *dst, int dst_len) {
+    i2c_write_blocking(i2c1, addr, src, src_len, true);
+    i2c_read_blocking(i2c1, addr, dst, dst_len, false);
+}
+
+
+// for trouble shooting write-read-nostop issue which magically resolved itself. gremlins. 
+// uint8_t fetch_touchwheel() {
+//     uint8_t reg = 0;
+//     uint8_t dst = 0;
+//     i2c_write_blocking(i2c1, 0x54, &reg, 1, true);
+//     i2c_read_blocking(i2c1, 0x54, &dst, 1, false);
+//     return dst;
+//}
+
+// void lis3dh_read_data(uint8_t reg, float *final_value) {
+//     // Read two bytes of data and store in a 16 bit data structure
+//     uint8_t lsb;
+//     uint8_t msb;
+//     uint16_t raw_accel;
+//     i2c_write_blocking(i2c_default, ADDRESS, &reg, 1, true);
+//     i2c_read_blocking(i2c_default, ADDRESS, &lsb, 1, false);
+
+//     reg |= 0x01;
+//     i2c_write_blocking(i2c_default, ADDRESS, &reg, 1, true);
+//     i2c_read_blocking(i2c_default, ADDRESS, &msb, 1, false);
+
+//     raw_accel = (msb << 8) | lsb;
+
+//     lis3dh_calc_value(raw_accel, final_value, IsAccel);
+// }

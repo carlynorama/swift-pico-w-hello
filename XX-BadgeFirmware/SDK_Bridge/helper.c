@@ -120,3 +120,7 @@ int i2c_i2c1_address_check(uint8_t addr) {
 int i2c_write_i2c0(uint8_t addr, const uint8_t *src, int len, bool nostop) {
     i2c_write_blocking(i2c0, addr, src, len, nostop);
 }
+
+int i2c_write_i2c1(uint8_t addr, const uint8_t *src, int len, bool nostop) {
+    i2c_write_blocking(i2c1, addr, src, len, nostop);
+}

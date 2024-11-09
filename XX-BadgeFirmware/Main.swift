@@ -121,19 +121,24 @@ extension TouchwheelSAO {
     }
 
     func setColor(r:UInt8, g:UInt8, b:UInt8) {
-
+        if let i2cBus {
+            i2cBus.writeSequence([(r, Register.REG_LED_RGBR.rawValue),
+                                (g, Register.REG_LED_RGBG.rawValue),
+                                (b, Register.REG_LED_RGBB.rawValue)
+                                ], for:address)
+        }
     }
 
     func onStatusLED() {
         if let i2cBus {
-            i2cBus.write(1, toRegister:Register.REG_LED_STATUS.rawValue, at:address)
+            i2cBus.write(1, at:Register.REG_LED_STATUS.rawValue, for:address)
         }
         
     }
 
     func offStatusLED() {
         if let i2cBus {
-            i2cBus.write(0, toRegister:Register.REG_LED_STATUS.rawValue, at:address)
+            i2cBus.write(0, at:Register.REG_LED_STATUS.rawValue, for:address)
         }
     }
 }

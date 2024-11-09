@@ -10,7 +10,7 @@ struct Main {
         USBSerial.initHardware()
 
         //expected I2C devices and their addresses
-        let petalAddress:UInt8 = 0x00
+        //let petalAddress:UInt8 = 0x00
         let touchwheelAddress:UInt8 = 0x54
 
         let bus0 = I2C(.i2c0, dataPin:0, clockPin:1)

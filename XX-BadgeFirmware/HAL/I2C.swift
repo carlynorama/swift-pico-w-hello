@@ -42,6 +42,8 @@ struct I2C {
         I2C.scan(instance, for:address)
     }
 
+
+
     //send a single
     func write(_ value:UInt8, at register:UInt8, for address:UInt8) {
         //uint8_t addr, const uint8_t *src, int len, bool nostop
@@ -72,6 +74,15 @@ struct I2C {
             var writeBuffer:[UInt8] = [register,value]
             let _ = sending_func(address, &writeBuffer, len, false)
         }
+    }
+
+    func read(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+        //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
+        var result = Array<UInt8>(repeating: 0, count: Int(length))
+        
+        return result.withContiguousMutableStorageIfAvailable { dest in
+            let _ = i2c_read_i2c0(addr, dest.baseAddress, length, false)
+        } 
     }
 
 
@@ -120,14 +131,10 @@ extension I2C {
         // }
         // return validAddresses
 
-        //TODO switch to this once verify scan works. 
-            // //cool, didn't think to do this in Swift before. 
-            // //maxAddress is top of the 7bit address space.
-            var validAddresses:[UInt8] = (0..<(1 << 7)).filter { a in
+            //maxAddress is 128, or 10000000
+            return (0..<(1 << 7)).filter { a in
                 !I2C.isReserved(UInt8(a)) && checking_func(UInt8(a)) > -1
             }
-            return validAddresses
-
     }
 
     static func scan(_ instance:Instance, for address:UInt8) -> Bool {

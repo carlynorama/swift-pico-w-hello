@@ -124,3 +124,13 @@ int i2c_write_i2c0(uint8_t addr, const uint8_t *src, int len, bool nostop) {
 int i2c_write_i2c1(uint8_t addr, const uint8_t *src, int len, bool nostop) {
     i2c_write_blocking(i2c1, addr, src, len, nostop);
 }
+
+//----------- BASIC READ
+
+int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop) {
+    i2c_read_blocking(i2c0, addr, dst, len, nostop);
+}
+
+int i2c_read_i2c1(uint8_t addr, uint8_t *dst, int len, bool nostop) {
+    i2c_read_blocking(i2c1, addr, dst, len, nostop);
+}

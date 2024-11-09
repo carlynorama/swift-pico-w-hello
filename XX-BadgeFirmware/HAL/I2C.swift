@@ -76,7 +76,8 @@ struct I2C {
         }
     }
 
-    func read(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+    //won't need this typically, a read without a pre-write
+    private func read(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
         let reading_func:(UInt8, UnsafeMutablePointer<UInt8>?, Int32, Bool) -> Int32 = switch instance {
             case .i2c0 : i2c_read_i2c0
             case .i2c1 : i2c_read_i2c1
@@ -93,6 +94,47 @@ struct I2C {
         return buffer
     }
 
+    
+    func readValue(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+        let reading_func:(UInt8, UnsafeMutablePointer<UInt8>?, Int32, Bool) -> Int32 = switch instance {
+            case .i2c0 : i2c_read_i2c0
+            case .i2c1 : i2c_read_i2c1
+        }
+
+        let sending_func:(UInt8, UnsafePointer<UInt8>, Int32, Bool) -> Int32 = switch instance {
+                case .i2c0 : i2c_write_i2c0
+                case .i2c1 : i2c_write_i2c1
+        }
+
+        //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
+        var readBuffer = Array<UInt8>(repeating: 0, count: Int(length))
+        var writeBuffer:[UInt8] = [register]
+        let _ = sending_func(addr, &writeBuffer, length, false) //TODO: when set to true fails?
+        //function returns status code in theory.
+        let _ = readBuffer.withContiguousMutableStorageIfAvailable { dest in
+            reading_func(addr, dest.baseAddress, length, false)
+        } 
+
+        return readBuffer
+    }
+
+    //Currently not working, TODO, test with other i2c device. 
+    func readValue2(from addr:UInt8, at register:UInt8, length:Int32) -> [UInt8] {
+        let write_reading_func:(UInt8, UnsafePointer<UInt8>, Int32, UnsafeMutablePointer<UInt8>?, Int32) -> Int32 = switch instance {
+            case .i2c0 : i2c_write_read_i2c0
+            case .i2c1 : i2c_write_read_i2c1
+        }
+
+        //int i2c_read_i2c0(uint8_t addr, uint8_t *dst, int len, bool nostop);
+        var readBuffer = Array<UInt8>(repeating: 0, count: Int(length))
+        var writeBuffer:[UInt8] = [register]
+
+        let _ = readBuffer.withContiguousMutableStorageIfAvailable { dest in
+            write_reading_func(addr, &writeBuffer, 1, dest.baseAddress, length)
+        } 
+
+        return readBuffer
+    }
 
 
 }

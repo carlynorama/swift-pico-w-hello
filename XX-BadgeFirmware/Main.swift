@@ -15,42 +15,42 @@ struct Main {
         }
         USBSerial.initHardware()
 
+        let led = OnboardLED()
+
+        
         //expected I2C devices and their addresses
-        //let petalAddress:UInt8 = 0x00
+        let petalAddress:UInt8 = 0x00
         let touchwheelAddress:UInt8 = 0x54
 
+        //Set up I2C busses. 
+        //TODO: These are structs. Probably should be classes. 
         let bus0 = I2C(.i2c0, dataPin:0, clockPin:1)
         let bus1 = I2C(.i2c1, dataPin:26, clockPin:27)
-
-
-        //turn on board LED
-        //find devices on i2c busses
-
-        //if petal run test spiral
         
+        //Turn on board LED
+        led.set(isOn:true)
+
+        //Find devices on i2c busses
         
         let touchWheel = TouchwheelSAO(expectedAddress: touchwheelAddress) 
-        if touchWheel != nil {
-                USBSerial.send("made a touchWheel")
+        let pinwheel = PinwheelSAO(expectedAddress: petalAddress) 
+        if let pinwheel {
+            //if petal do setup and run test spiral
+            pinwheel.setBadgeSettings()
+            pinwheel.testPattern()
+            pinwheel.setMiddle(r:true, g:true, b:false)
         }
 
-        while true {
-            // USBSerial.send("Hello World\n");
-            // let whosThere0 = bus0.scan()
-            // USBSerial.send("I can see: \(whosThere0.count) devices on 0 \n");
-            // USBSerial.send("\(whosThere0[0])")
-            // USBSerial.send(whosThere0, label: "What addresses 0")
-            // let found0 = bus0.scan(for: whosThere0[0]) 
-            // if found0 {
-            //     USBSerial.send("\(found0)")
-            // } else {
-            //     USBSerial.send("scan for doesn't work")
-            // }
+        if pinwheel != nil && touchWheel != nil {
+            pinwheel!.setMiddle(r:false, g:true, b:false)
+            sleep_ms(200)
+        }
 
-            // let whosThere1 = bus1.scan()
-            // USBSerial.send("I can see: \(whosThere1.count) devices on 1 \n");
-            // USBSerial.send("\(whosThere1[0])")
-            // USBSerial.send(whosThere1, label: "What addresses 0")
+        //Turn off board LED
+
+        led.set(isOn:false)
+
+        while true {
 
             if let touchWheel {
                 let val = touchWheel.readWheel()

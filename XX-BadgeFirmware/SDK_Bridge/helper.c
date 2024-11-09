@@ -50,6 +50,7 @@ bool i2c_reserved_addr(uint8_t addr) {
 // }
 
 //--------- SETUPS
+//Note should I add i2c_set_slave_mode(_i2c_dev, false, 0); ?
 int i2c_setup(i2c_inst_t *i2c, int sda_pin, int scl_pin, int baud_rate) {
         gpio_set_function(sda_pin, GPIO_FUNC_I2C);
         gpio_set_function(scl_pin, GPIO_FUNC_I2C);

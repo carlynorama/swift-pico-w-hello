@@ -16,10 +16,6 @@ struct Main {
         let bus0 = I2C(.i2c0, dataPin:0, clockPin:1)
         let bus1 = I2C(.i2c1, dataPin:26, clockPin:27)
 
-        var r:UInt8 = 200
-        var g:UInt8 = 100
-        var b:UInt8 = 0
-
 
         //turn on board LED
         //find devices on i2c busses
@@ -51,7 +47,7 @@ struct Main {
             // USBSerial.send(whosThere1, label: "What addresses 0")
 
             if let touchWheel {
-                touchWheel.setColor(r: r, g: g, b: b)
+                touchWheel.setColor(r: 200, g: 100, b: 0)
                 touchWheel.onStatusLED()
                 sleep_ms(250)
                 touchWheel.offStatusLED()
@@ -128,13 +124,13 @@ extension TouchwheelSAO {
 
     func setColor(r:UInt8, g:UInt8, b:UInt8) {
         if let i2cBus {
-            // i2cBus.writeSequence([(r, Register.REG_LED_RGBR.rawValue),
-            //                     (g, Register.REG_LED_RGBG.rawValue),
-            //                     (b, Register.REG_LED_RGBB.rawValue)
-            //                     ], for:address)
-            i2cBus.write(r, at:Register.REG_LED_RGBR.rawValue, for:address)
-            i2cBus.write(g, at:Register.REG_LED_RGBG.rawValue, for:address)
-            i2cBus.write(b, at:Register.REG_LED_RGBB.rawValue, for:address)
+            i2cBus.writeSequence([(r, Register.REG_LED_RGBR.rawValue),
+                                (g, Register.REG_LED_RGBG.rawValue),
+                                (b, Register.REG_LED_RGBB.rawValue)
+                                ], for:address)
+            // i2cBus.write(r, at:Register.REG_LED_RGBR.rawValue, for:address)
+            // i2cBus.write(g, at:Register.REG_LED_RGBG.rawValue, for:address)
+            // i2cBus.write(b, at:Register.REG_LED_RGBB.rawValue, for:address)
         }
     }
 

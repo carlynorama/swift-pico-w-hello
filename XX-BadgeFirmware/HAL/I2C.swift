@@ -67,14 +67,11 @@ struct I2C {
         }
         let len = Int32(1 + MemoryLayout.size(ofValue: value[0].0))
         //int i2c_write_i2c0(uint8_t addr, const uint8_t *src, size_t len, bool nostop);
-        for i in (0..<(value.count-1)) {
+        for i in (0..<(value.count)) {
             let (value, register) = value[i]
             var writeBuffer:[UInt8] = [register,value]
-            let _ = sending_func(address, &writeBuffer, len, true)
-        }
-            let (value, register) = value.last!
-            var writeBuffer:[UInt8] = [register,value]
             let _ = sending_func(address, &writeBuffer, len, false)
+        }
     }
 
 

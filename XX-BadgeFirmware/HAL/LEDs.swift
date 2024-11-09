@@ -3,11 +3,11 @@
 //Once you've imported cyw43_arch the regular io stops working?
 //because it works in C..
 struct OnboardLED {
-    let pin:UInt32
+    let pin:UInt32 = UInt32(CYW43_WL_GPIO_LED_PIN)
 
-    init(pin p:UInt32) {
-        self.pin = p
-    }
+    // init(pin p:UInt32) {
+    //     self.pin = p
+    // }
 
     func high() {
         cyw43_arch_gpio_put(pin, true)
@@ -36,7 +36,6 @@ struct OnboardLED {
         sleep_ms(250)
     }
 }
-
 
 
 // //TODO: why does addressing the onboard LED on the picow

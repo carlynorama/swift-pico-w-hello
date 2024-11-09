@@ -10,4 +10,23 @@ struct USBSerial {
         //TODO: why puts and not stdio_puts
         puts(c);
     }
+
+    // No generics yet.
+    // static func send<T>(_ array:[T], label:UnsafePointer<CChar>) {
+    //     puts("------------------");
+    //     puts(label);
+    //     for (index, item) in array.enumerated() {
+    //         puts("\t\(index):\(item)");
+    //     }
+    //     puts("------------------");
+    // }
+
+    static func send(_ array:[Int32], label:UnsafePointer<CChar>) {
+        puts("------------------");
+        puts(label);
+        for (index, item) in array.enumerated() {
+            puts("\t\(index):\(item)");
+        }
+        puts("------------------");
+    }
 }

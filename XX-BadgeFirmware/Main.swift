@@ -15,55 +15,72 @@ struct Main {
         }
         USBSerial.initHardware()
 
+        let led = OnboardLED()
+
+        
         //expected I2C devices and their addresses
-        //let petalAddress:UInt8 = 0x00
+        let petalAddress:UInt8 = 0x00
         let touchwheelAddress:UInt8 = 0x54
 
+        //Set up I2C busses. 
+        //TODO: These are structs. Probably should be classes. 
         let bus0 = I2C(.i2c0, dataPin:0, clockPin:1)
         let bus1 = I2C(.i2c1, dataPin:26, clockPin:27)
-
-
-        //turn on board LED
-        //find devices on i2c busses
-
-        //if petal run test spiral
         
+        //Turn on board LED
+        led.set(isOn:true)
+
+        //Find devices on i2c busses
         
         let touchWheel = TouchwheelSAO(expectedAddress: touchwheelAddress) 
-        if touchWheel != nil {
-                USBSerial.send("made a touchWheel")
+        let pinwheel = PinwheelSAO(expectedAddress: petalAddress) 
+        if let pinwheel {
+            //if petal do setup and run test spiral
+            pinwheel.setBadgeSettings()
+            pinwheel.testPattern()
+            pinwheel.setMiddle(r:true, g:true, b:false)
         }
 
-        while true {
-            // USBSerial.send("Hello World\n");
-            // let whosThere0 = bus0.scan()
-            // USBSerial.send("I can see: \(whosThere0.count) devices on 0 \n");
-            // USBSerial.send("\(whosThere0[0])")
-            // USBSerial.send(whosThere0, label: "What addresses 0")
-            // let found0 = bus0.scan(for: whosThere0[0]) 
-            // if found0 {
-            //     USBSerial.send("\(found0)")
-            // } else {
-            //     USBSerial.send("scan for doesn't work")
-            // }
+        let bA = Button(pin: 8)
+        let bB = Button(pin: 9)
+        let bC = Button(pin: 28)
 
-            // let whosThere1 = bus1.scan()
-            // USBSerial.send("I can see: \(whosThere1.count) devices on 1 \n");
-            // USBSerial.send("\(whosThere1[0])")
-            // USBSerial.send(whosThere1, label: "What addresses 0")
+        if pinwheel != nil && touchWheel != nil {
+            pinwheel!.setMiddle(r:false, g:true, b:false)
+            sleep_ms(200)
+        }
+
+        //Turn off board LED
+
+        led.set(isOn:false)
+
+        while true {
 
             if let touchWheel {
                 let val = touchWheel.readWheel()
                 USBSerial.send("\(val)")
-                // if val == 0 {
-                //     touchWheel.setColor(r: 200, g: 100, b: 0)
-                // }
-                touchWheel.onStatusLED()
-                sleep_ms(250)
-                touchWheel.offStatusLED()
-                sleep_ms(250)
+                if val == 0 {
+                    touchWheel.setColor(r: 200, g: 100, b: 0)
+                } else if let pinwheel {
+                    let bladePattern = pinwheel.makeProgressByte(from: val)
+                    pinwheel.setAllBlades(bladePattern)
+                }
+                //code needs a short sleep to let the blocking I2C pair that is 
+                //a write-read do its thing, apparently. 10 allows for a good enough
+                //debounce, too. 
+                //sleep_ms(5)
+                sleep_ms(10) 
+
+            }
+
+            //current firmware doesn't allow for masking just the RGB LED, so don't
+            //use the touchwheel and the buttons at the same time just yet. 
+            //TODO: The blades w/o RGB leds stay lit. It's a feature I swear.
+            if let pinwheel {
+                pinwheel.setMiddle(r:bA.isActive, g:bB.isActive, b:bC.isActive)
             }
             
+
 
 
             //if petal, write various things to it based on button

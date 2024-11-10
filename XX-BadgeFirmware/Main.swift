@@ -41,6 +41,10 @@ struct Main {
             pinwheel.setMiddle(r:true, g:true, b:false)
         }
 
+        let bA = Button(pin: 8)
+        let bB = Button(pin: 9)
+        let bC = Button(pin: 28)
+
         if pinwheel != nil && touchWheel != nil {
             pinwheel!.setMiddle(r:false, g:true, b:false)
             sleep_ms(200)
@@ -55,15 +59,28 @@ struct Main {
             if let touchWheel {
                 let val = touchWheel.readWheel()
                 USBSerial.send("\(val)")
-                // if val == 0 {
-                //     touchWheel.setColor(r: 200, g: 100, b: 0)
-                // }
-                touchWheel.onStatusLED()
-                sleep_ms(250)
-                touchWheel.offStatusLED()
-                sleep_ms(250)
+                if val == 0 {
+                    touchWheel.setColor(r: 200, g: 100, b: 0)
+                } else if let pinwheel {
+                    let bladePattern = pinwheel.makeProgressByte(from: val)
+                    pinwheel.setAllBlades(bladePattern)
+                }
+                //code needs a short sleep to let the blocking I2C pair that is 
+                //a write-read do its thing, apparently. 10 allows for a good enough
+                //debounce, too. 
+                //sleep_ms(5)
+                sleep_ms(10) 
+
+            }
+
+            //current firmware doesn't allow for masking just the RGB LED, so don't
+            //use the touchwheel and the buttons at the same time just yet. 
+            //TODO: The blades w/o RGB leds stay lit. It's a feature I swear.
+            if let pinwheel {
+                pinwheel.setMiddle(r:bA.isActive, g:bB.isActive, b:bC.isActive)
             }
             
+
 
 
             //if petal, write various things to it based on button

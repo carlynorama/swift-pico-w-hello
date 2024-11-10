@@ -42,6 +42,12 @@ struct PinwheelSAO:BadgeSAO {
         set(blades:[2], to: b ? 0b10000000 : 0) //blue
         set(blades:[3], to: r ? 0b10000000 : 0) //red
         set(blades:[4], to: g ? 0b10000000 : 0) //green
+        set(blades: [1,5,6,7,8], to: 0)
+    }
+
+    func makeProgressByte(from value: UInt8) -> UInt8 {
+        let howmany = value/36  //255/7 because top bit is for button indication. 
+        return (255 << howmany) & 0b01111111
     }
 
     func testPattern() {

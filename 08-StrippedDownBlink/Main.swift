@@ -11,13 +11,15 @@ struct Main {
     static func main() {
         //MARK: SETUP
         let statusLED = OnboardLED()
+        USBSerial.initHardware()
 
         blink_set_number() //uses function passed into the C from Swift
         blocking_sleep(1000);
 
         //MARK: LOOP
         while (true) {
-            blink(led: statusLED, onTime:250, offTime: 250)     
+            blink(led: statusLED, onTime:250, offTime: 250)
+            USBSerial.send("Hello World")     
         }
 
     }
@@ -46,3 +48,17 @@ struct OnboardLED:DigitalIndicator {
     } 
 
 }
+
+struct USBSerial {
+    static func initHardware() {
+        let _ = usb_init_hardware()
+    }
+
+    static func send(_ message:StaticString) {
+        //usb_serial_send(c)
+        message.withUTF8Buffer { bufferPointer in
+            usb_serial_send(bufferPointer.baseAddress!)
+        }
+    }
+}
+

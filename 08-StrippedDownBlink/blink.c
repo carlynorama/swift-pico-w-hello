@@ -14,6 +14,10 @@
 #define LED_DELAY_MS 250
 #endif
 
+void blocking_sleep(int ms) {
+    sleep_ms(ms);
+}
+
 // Perform initialisation
 int pico_onboard_led_init(void) {
 #if defined(PICO_DEFAULT_LED_PIN)

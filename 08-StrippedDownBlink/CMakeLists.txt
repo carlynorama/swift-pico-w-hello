@@ -1,18 +1,3 @@
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-# if(WIN32)
-#     set(USERHOME $ENV{USERPROFILE})
-# else()
-#     set(USERHOME $ENV{HOME})
-# endif()
-# set(sdkVersion 2.0.0)
-# set(toolchainVersion 13_2_Rel1)
-# set(picotoolVersion 2.0.0)
-# set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-# if (EXISTS ${picoVscode})
-#     include(${picoVscode})
-# endif()
-# ====================================================================================
-
 cmake_minimum_required(VERSION 3.13)
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 # include($ENV{PICO_SDK_PATH}/external/pico_extras_import_optional.cmake)
@@ -86,9 +71,6 @@ add_custom_command(
         -wmo 
         # allows @main https://forums.swift.org/t/main-in-a-single-swift-file/63079/3
         -parse-as-library
-
-        #$$\( echo '$<TARGET_PROPERTY:${MAIN_TARGET_NAME},INCLUDE_DIRECTORIES>' | tr '\;' '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
-        #$$\( echo '${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}'             | tr ' '  '\\n' | sed -e 's/\\\(.*\\\)/-Xcc -I\\1/g' \)
         # Add the briding header 
         -import-bridging-header ${CMAKE_CURRENT_LIST_DIR}/BridgingHeader.h
         # list the swift files to compile

@@ -29,11 +29,11 @@ struct OnboardLED:DigitalIndicator {
         //handle the result code yourself. 
         //let _ = pico_onboard_led_init()
         //will crash program if can't find LED
-        pico_onboard_led_assert_init() 
+        onboard_led_assert_init() 
     }
 
     func set(isOn:Bool) {
-        pico_onboard_led_set(isOn)
+        onboard_led_set(isOn)
     } 
 
 }

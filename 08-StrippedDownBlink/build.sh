@@ -5,7 +5,7 @@
 ## Note, toolchain was installed for all users.
 ## /Users/$USER/Library/Developer/Toolchains/ for local only
 TOOLCHAINLOC='/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a.xctoolchain'
-BOARD='pico_w'
+BOARD='pico'
 SDK_PATH=/Users/$USER/Developer/pico-dev/pico-sdk
 ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 DESTINATION=/Volumes/RPI-RP2
@@ -30,7 +30,7 @@ export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
 # Ninjaless
 mkdir -p $BUILDROOT
 cd $BUILDROOT
-cmake .. -DPICO_BOARD=pico_w
+cmake .. -DPICO_BOARD=$BOARD
 make
 cd ../
 

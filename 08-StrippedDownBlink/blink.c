@@ -19,7 +19,7 @@ void blocking_sleep(int ms) {
 }
 
 // Perform initialisation
-int pico_onboard_led_init(void) {
+int onboard_led_init(void) {
 #if defined(PICO_DEFAULT_LED_PIN)
     // A device like Pico that uses a GPIO for the LED will define PICO_DEFAULT_LED_PIN
     // so we can use normal GPIO functionality to turn the led on and off
@@ -33,7 +33,7 @@ int pico_onboard_led_init(void) {
 }
 
 // Turn the led on or off
-void pico_onboard_led_set(bool led_on) {
+void onboard_led_set(bool led_on) {
 #if defined(PICO_DEFAULT_LED_PIN)
     // Just set the GPIO on or off
     gpio_put(PICO_DEFAULT_LED_PIN, led_on);
@@ -43,15 +43,15 @@ void pico_onboard_led_set(bool led_on) {
 #endif
 }
 
-void pico_onboard_led_assert_init() {
-    int rc = pico_onboard_led_init();
+void onboard_led_assert_init() {
+    int rc = onboard_led_init();
     hard_assert(rc == PICO_OK);
 }
 
-void pico_main_loop_additions() {
-    pico_onboard_led_set(true);
+void main_loop_additions() {
+    onboard_led_set(true);
     sleep_ms(LED_DELAY_MS);
-    pico_onboard_led_set(false);
+    onboard_led_set(false);
     sleep_ms(LED_DELAY_MS);
 }
 

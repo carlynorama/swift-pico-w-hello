@@ -12,6 +12,9 @@ struct Main {
         //MARK: SETUP
         let statusLED = OnboardLED()
 
+        blink_set_number() //uses function passed into the C from Swift
+        blocking_sleep(1000);
+
         //MARK: LOOP
         while (true) {
             blink(led: statusLED, onTime:250, offTime: 250)     
@@ -19,6 +22,12 @@ struct Main {
 
     }
 }
+
+@_cdecl("PassToSDKModule")
+func doesThisStillWork(x: Int32) -> Int32 {
+    5 + x
+}
+
 
 protocol DigitalIndicator {
     func set(isOn:Bool) 

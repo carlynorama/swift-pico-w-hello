@@ -13,4 +13,8 @@ void onboard_led_assert_init(void);
 
 void main_loop_additions(void);
 
+
+void blink_set_number();
+
+
 #endif

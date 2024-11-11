@@ -10,6 +10,7 @@
 #include "pico/cyw43_arch.h"
 #endif
 
+
 #ifndef LED_DELAY_MS
 #define LED_DELAY_MS 250
 #endif
@@ -53,6 +54,24 @@ void main_loop_additions() {
     sleep_ms(LED_DELAY_MS);
     onboard_led_set(false);
     sleep_ms(LED_DELAY_MS);
+}
+
+intptr_t PassToSDKModule(intptr_t);
+
+intptr_t use_swift_callback(intptr_t x) {
+    int result = PassToSDKModule(x);
+    return result;
+}
+
+void blink_set_number() {
+    int count = use_swift_callback(3);
+    for(int i = 0; i < count; i++) {
+        onboard_led_set(true);
+        sleep_ms(LED_DELAY_MS);
+        onboard_led_set(false);
+        sleep_ms(LED_DELAY_MS);
+    }
+
 }
 
 

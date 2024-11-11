@@ -71,6 +71,8 @@ add_custom_command(
         -wmo 
         # allows @main https://forums.swift.org/t/main-in-a-single-swift-file/63079/3
         -parse-as-library
+        # don'te allow for runtime allocations
+        -no-allocations
         # Add the briding header 
         -import-bridging-header ${CMAKE_CURRENT_LIST_DIR}/BridgingHeader.h
         # list the swift files to compile

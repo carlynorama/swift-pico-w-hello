@@ -55,7 +55,6 @@ struct USBSerial {
     }
 
     static func send(_ message:StaticString) {
-        //usb_serial_send(c)
         message.withUTF8Buffer { bufferPointer in
             usb_serial_send(bufferPointer.baseAddress!)
         }

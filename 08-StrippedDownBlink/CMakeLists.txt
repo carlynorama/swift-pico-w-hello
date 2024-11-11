@@ -5,7 +5,9 @@ include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 set(PROJECT_NAME blink_project)
 set(MAIN_TARGET_NAME blink)
 
+
 project(${PROJECT_NAME} C CXX ASM)
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -71,7 +73,8 @@ add_custom_command(
         -wmo 
         # allows @main https://forums.swift.org/t/main-in-a-single-swift-file/63079/3
         -parse-as-library
-        # don'te allow for runtime allocations
+        # don't allow for runtime allocations, 
+        # prevents posix_memalign issue, but PITA
         -no-allocations
         # Add the briding header 
         -import-bridging-header ${CMAKE_CURRENT_LIST_DIR}/BridgingHeader.h

@@ -17,4 +17,8 @@ void main_loop_additions(void);
 void blink_set_number();
 
 
+int usb_init_hardware(void);
+
+void usb_serial_send(const char *message);
+
 #endif

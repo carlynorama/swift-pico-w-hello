@@ -10,8 +10,8 @@ SDK_PATH=/Users/$USER/Developer/pico-dev/pico-sdk
 ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 DESTINATION=/Volumes/RPI-RP2
 EXPECTED_EXECUTABLE=blink.uf2
-echo $SDK_PATH
-echo $ARM_TOOLS
+# echo $SDK_PATH
+# echo $ARM_TOOLS
 
 
 # Determine file paths
@@ -33,6 +33,7 @@ cd $BUILDROOT
 cmake .. -DPICO_BOARD=pico_w
 make
 cd ../
+
 
 # cmake -B $BUILDROOT -G Ninja .
 # cmake --build $BUILDROOT

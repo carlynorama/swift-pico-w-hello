@@ -58,4 +58,6 @@ In the end used the function in the below example. In the Badge example it lives
 
 - https://github.com/apple/swift-playdate-examples/blob/749dd8f518429168d03e754764afb334a80b527d/Sources/Playdate/Playdate.swift#L21
 
+TODO: https://github.com/sparkfun/sparkfun-pico
+
 

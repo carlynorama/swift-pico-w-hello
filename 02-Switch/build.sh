@@ -16,7 +16,7 @@ echo $ARM_TOOLS
 
 # Determine file paths
 REPOROOT=$(git rev-parse --show-toplevel)
-SRCROOT=$REPOROOT
+SRCROOT=$REPOROOT/02-Switch
 BUILDROOT=$SRCROOT/build
 echo $BUILDROOT
 

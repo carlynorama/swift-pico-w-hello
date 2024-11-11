@@ -16,8 +16,8 @@ echo $ARM_TOOLS
 
 # Determine file paths
 REPOROOT=$(git rev-parse --show-toplevel)
-SRCROOT=$REPOROOT
-BUILDROOT=$REPOROOT/build
+SRCROOT=$REPOROOT/05-IncludeCFile
+BUILDROOT=$SRCROOT/build
 echo $BUILDROOT
 
 export TOOLCHAINS=$(plutil -extract CFBundleIdentifier raw -o - $TOOLCHAINLOC/Info.plist)

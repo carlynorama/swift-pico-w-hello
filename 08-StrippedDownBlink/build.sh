@@ -5,18 +5,18 @@
 ## Note, toolchain was installed for all users.
 ## /Users/$USER/Library/Developer/Toolchains/ for local only
 TOOLCHAINLOC='/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a.xctoolchain'
-BOARD='pico_w'
+BOARD='pico'
 SDK_PATH=/Users/$USER/Developer/pico-dev/pico-sdk
 ARM_TOOLS=$HOMEBREW_REPOSITORY/bin
 DESTINATION=/Volumes/RPI-RP2
-EXPECTED_EXECUTABLE=new-project-name.uf2
-echo $SDK_PATH
-echo $ARM_TOOLS
+EXPECTED_EXECUTABLE=blink.uf2
+# echo $SDK_PATH
+# echo $ARM_TOOLS
 
 
 # Determine file paths
 REPOROOT=$(git rev-parse --show-toplevel)
-SRCROOT=$REPOROOT/06-i2c-proof-of-concept
+SRCROOT=$REPOROOT/08-StrippedDownBlink
 BUILDROOT=$SRCROOT/build
 echo $BUILDROOT
 
@@ -30,12 +30,13 @@ export PICO_TOOLCHAIN_PATH=$ARM_TOOLS
 # Ninjaless
 mkdir -p $BUILDROOT
 cd $BUILDROOT
-cmake .. -DPICO_BOARD=pico_w
+cmake .. -DPICO_BOARD=$BOARD
 make
 cd ../
+
 
 # cmake -B $BUILDROOT -G Ninja .
 # cmake --build $BUILDROOT
 
 
-#cp $BUILDROOT/$EXPECTED_EXECUTABLE $DESTINATION
+cp $BUILDROOT/$EXPECTED_EXECUTABLE $DESTINATION
